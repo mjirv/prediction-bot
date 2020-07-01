@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Twitter bot bootstrap
 
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
@@ -276,3 +277,7 @@ Credit for the inspiration for this should go to [@amanhimself](https://twitter.
 MIT License
 
 Copyright (c) 2017, Scott Spence. All rights reserved.
+=======
+# prediction-bot
+A Twitter bot that reminds you when predictions people made come due so you can check if they were right
+>>>>>>> 710f68b471aa6504c0f7976df74ddad73ef15c81
