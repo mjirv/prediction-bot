@@ -2,6 +2,7 @@ const Twit = require('twit')
 const unique = require('unique-random-array')
 const config = require('../config')
 const isReply = require('../helpers/isReply')
+const tweetNow = require('../helpers/tweetNow')
 
 const param = config.twitterConfig
 const queryString = unique(param.queryString.split(','))
@@ -12,13 +13,10 @@ const retweet = () => {
   const query = queryString()
 
   bot.get(
-    'statuses/mentions_timeline',
+    'statuses/user_timeline',
     {
-      // q: query,
-      // result_type: param.resultType,
-      // lang: param.language,
-      // filter: 'safe',
-      // count: param.searchCount
+      screen_name: 'predictionrobot',
+      trim_user: true
     },
     (err, data, response) => {
       if (err) {
@@ -33,25 +31,19 @@ const retweet = () => {
         // }
 
         if (typeof(data) !== 'undefined') {
-          console.lol(data);
-          let retweetId = data[0].id_str
-
-          // bot.post(
-          //   'statuses/retweet/:id',
-          //   {
-          //     id: retweetId
-          //   },
-          //   (err, response) => {
-          //     if (err) {
-          //       console.lol('ERRORDERP: Retweet!', err)
-          //     }
-          //     console.lol(
-          //       'SUCCESS: RT: ',
-          //       data[0].text
-          //     )
-          //   }
-          // )
-          reply();
+          for (let i in data) {
+            tweet = data[i];
+            console.lol(tweet.text);
+            predictDate =  new Date(tweet.text.split("prediction on")[1] + "Z");
+            let now = new Date();
+            let lastRun = new Date(now - param.check_rate);
+            if (predictDate <= now && predictDate > lastRun) {
+              let replyUser = tweet.in_reply_to_screen_name;
+              let text = `Hi @${replyUser}. I am here to remind you about this prediction. Did it come true?`
+              let replyId = tweet.id_str;
+              tweetNow(text, replyId);
+            }
+          }
         }
       }
     }

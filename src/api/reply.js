@@ -1,27 +1,11 @@
 const Twit = require('twit')
 const unique = require('unique-random-array')
 const config = require('../config')
+const tweetNow = require('../helpers/tweetNow')
 
 const param = config.twitterConfig
-const randomReply = unique(param.randomReply.split('|'))
 
 const bot = new Twit(config.twitterKeys)
-
-// function: tweets back to user who followed
-function tweetNow(text, replyId) {
-  let tweet = {
-    status: text,
-    in_reply_to_status_id: replyId,
-    auto_populate_reply_metadata: true
-  }
-
-  bot.post('statuses/update', tweet, (err, data, response) => {
-    if (err) {
-      console.lol('ERRORDERP Reply', err)
-    }
-    console.lol('SUCCESS: Replied: ', text)
-  })
-}
 
 // function: replies to user who followed
 const reply = event => {
@@ -29,14 +13,12 @@ const reply = event => {
   console.lol(event);
   let screenName = event.user.screen_name
   let eventId = event.id_str
+  let predictDate = new Date(event.text.split("predict ")[1] + "Z")
 
   if (screenName === config.twitterConfig.username) {
     return
   }
-  const response = randomReply()
-
-  const res = response.replace('${screenName}', screenName)
-
+  const res = `OK @${screenName}, I will remind you about this prediction on ${predictDate.toUTCString()}.`
   tweetNow(res, eventId)
 }
 

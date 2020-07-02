@@ -10,14 +10,14 @@ const consoleLol = require('console.lol')
 
 const bot = new Twit(config.twitterKeys)
 
-const retweet = require('./api/retweet')
+const checkPredictions = require('./api/checkPredictions')
 const reply = require('./api/reply')
 
 console.rofl('Bot starting...')
 
 // retweet on keywords
-// retweet()
-// setInterval(retweet, config.twitterConfig.retweet)
+checkPredictions();
+setInterval(checkPredictions, config.twitterConfig.check_rate)
 
 // reply to new follower
 // commented because no user stream anymore
