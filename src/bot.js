@@ -16,12 +16,13 @@ const reply = require('./api/reply')
 console.rofl('Bot starting...')
 
 // retweet on keywords
-retweet()
-setInterval(retweet, config.twitterConfig.retweet)
+// retweet()
+// setInterval(retweet, config.twitterConfig.retweet)
 
 // reply to new follower
-const userStream = bot.stream('user')
-userStream.on('follow', reply)
+// commented because no user stream anymore
+const userStream = bot.stream('statuses/filter', { track: '@predictionrobot predict' })
+userStream.on('tweet', reply)
 
 // This will allow the bot to run on now.sh
 const server = createServer((req, res) => {
